@@ -1,0 +1,103 @@
+   ActivateSceneIntent:
+       action:
+         service: scene.turn_on
+         data_template:
+           entity_id: scene.{{ Scene | replace(" ", "_") }}
+       speech:
+         type: plain
+         text: OK
+         
+   RunScriptIntent:
+       action:
+         service: script.turn_on
+         data_template:
+           entity_id: script.{{ Script | replace(" ", "_") }}
+       speech:
+         type: plain
+         text: OK
+
+   amzn1.ask.skill.5979b19e-55dd-405d-b244-f6e80b0d08e4:
+       action:
+          - service: script.turn_on
+            entity_id: script.theatre_on
+          - service: scene.turn_on
+            entity_id: scene.start_theatre
+       speech:
+         type: plain
+         text: Theater is starting, enjoy
+
+   amzn1.ask.skill.28234ca5-c9fb-47d1-8570-b73c1276ed12:
+       action:
+          - service: script.turn_on
+            entity_id: script.theatre_off
+          - service: scene.turn_on
+            entity_id: scene.pause_theatre
+       speech:
+         type: plain
+         text: Theater turning off, have a good day    
+   
+   amzn1.ask.skill.1e038923-3eec-4c92-b5df-89cc9ada692e:
+       action:
+          - service: scene.turn_on
+            entity_id: scene.play_theatre
+       speech:
+         type: plain
+         text: Theater going dark    
+   
+   amzn1.ask.skill.802f840e-84f5-4257-82b8-58a90e90f4b2:   
+       action:
+          - service: switch.turn_on
+            entity_id: switch.outside_light
+       speech:
+         type: plain
+         text: OK, outside light is now on    
+
+   amzn1.ask.skill.5a1bf254-c6ce-4f99-a79f-7714b9de3264:
+       action:
+          - service: switch.turn_off
+            entity_id: switch.outside_light
+       speech:
+         type: plain
+         text: OK, outside light is now off    
+   
+   amzn1.ask.skill.ee0f6aee-3637-453b-b487-27f3df56dcd9:
+       speech:
+         type: plain
+         text: >-
+            {%- if is_state("binary_sensor.entry_door", "off") -%}
+               front door is closed.  Say Alexa, is front door locked
+            {%- else -%}
+               ALERT! front door is open
+            {%- endif -%} 
+         
+   amzn1.ask.skill.5953b2e8-a3cc-47ee-b2f2-26dba34f8e75:
+       speech:
+         type: plain
+         text: >-
+            {% if is_state("binary_sensor.garage_door", "off") %}
+               garage door is closed.  Check lock manually  
+            {% else %}
+               ALERT! garage door is open.
+            {% endif %} 
+  
+   amzn1.ask.skill.8f30d0b8-aee8-4f13-ac50-34934402945a:  
+       action:
+          - service: input_select.select_next
+       speech:
+         type: plain
+         text: OK    
+
+   amzn1.ask.skill.e0eb997c-07bc-4304-8e3c-0a7eff35fb31:
+       action:
+          - service: input_select.select_previous
+       speech:
+         type: plain
+         text: OK
+
+   amzn1.ask.skill.ce34b51c-2039-47a7-8dbc-ee64855b322c:
+       action:
+          - service: input_select.select_next
+       speech:
+         type: plain
+         text: OK
+

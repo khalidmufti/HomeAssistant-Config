@@ -1,0 +1,102 @@
+   projector_on:
+      alias: Turn Theater Projector ON
+      sequence:
+         - service:  remote.send_command
+           data:
+              entity_id: remote.epson
+              command: 'POWER_ON'
+              device: remote.epson
+    
+   projector_off:
+      alias: Turn Theater Projector OFF
+      sequence:
+         - service:  remote.send_command
+           data:
+              entity_id: remote.epson
+              command: 'POWER_OFF'
+              device: remote.epson
+              num_repeats: 2
+              delay_secs: 1
+
+   yamaha_on:
+      alias: Turn Yamaha ON
+      sequence:
+         - service:  media_player.turn_on
+           data:
+              entity_id: media_player.rxa2000
+
+   yamaha_off:
+      alias: Turn Yamaha OFF
+      sequence:
+         - service:  media_player.turn_off
+           data:
+              entity_id: media_player.rxa2000
+
+   theatre_on:
+      alias: Turn Theater ON
+      sequence:
+         - service:  remote.send_command
+           data:
+              entity_id: remote.epson
+              command: 'POWER_ON'
+              device: remote.epson
+         - service:  media_player.turn_on
+           data:
+              entity_id: media_player.rxa2000
+         - service:  media_player.turn_on
+           data:
+              entity_id: media_player.kodi
+         - service:  remote.send_command
+           data:
+              entity_id: remote.epson
+              command: 'POWER_ON'
+              device: remote.epson
+         - service:  media_player.turn_on
+           data:
+              entity_id: media_player.rxa2000
+         - service:  media_player.turn_on
+           data:
+              entity_id: media_player.kodi
+         - service:  remote.send_command
+           data:
+              entity_id: remote.epson
+              command: 'POWER_ON'
+              device: remote.epson
+         - service:  media_player.turn_on
+           data:
+              entity_id: media_player.rxa2000
+         - service:  media_player.turn_on
+           data:
+              entity_id: media_player.kodi
+
+   theatre_off:
+      alias: Turn Theater OFF
+      sequence:
+         - service:  remote.send_command
+           data:
+              entity_id: remote.epson
+              command: 'POWER_OFF'
+              device: remote.epson
+              num_repeats: 2
+              delay_secs: 1
+         - service:  media_player.turn_off
+           data:
+              entity_id: media_player.rxa2000
+         - service:  media_player.turn_off
+           data:
+              entity_id: media_player.kodi
+
+   kodi_on:
+      alias: Turn Kodi ON
+      sequence:
+         - service:  media_player.turn_on
+           data:
+              entity_id: media_player.kodi
+
+   kodi_off:
+      alias: Turn Kodi OFF
+      sequence:
+         - service:  media_player.turn_off
+           data:
+              entity_id: media_player.kodi
+              

@@ -1,0 +1,4 @@
+  moon:
+    name: Moon
+    entities:
+      - sensor.moon

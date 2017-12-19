@@ -1,0 +1,301 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret lat
+  longitude: !secret long 
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 156
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret region
+  # Customization file
+  customize: !include customize.yaml
+  
+zone: 
+  - name: Home
+    latitude: !secret lat
+    longitude: !secret long
+    radius: 100
+    icon: mdi:home
+  
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+wake_on_lan:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+   api_password: !secret http_password
+   ssl_certificate: !secret ssl_cert
+   ssl_key: !secret ssl_key
+   base_url: !secret base_url
+   ip_ban_enabled: true
+   login_attempts_threshold: 2
+   
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+#discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+#conversation:
+
+#recorder:
+#   purge_interval: 2
+#   purge_keep_days: 5
+#   include:
+#      entities:
+#         - binary_sensor.entry_door
+#         - binary_sensor.garage_door
+#         - switch.outside_light
+
+# Enables support for tracking state changes over time
+#history:
+
+# View all events in a logbook
+#logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+isy994:
+  host: http://192.168.100.9:50001
+  username: !secret isy_username
+  password: !secret isy_password
+  hidden_string: "Auto DR"
+
+media_player:
+  - platform: kodi
+    host: 192.168.100.17
+    port: 8080
+    username: !secret media_player_username
+    password: !secret media_player_password    
+    turn_on_action:
+      - service: wake_on_lan.send_magic_packet
+        data:
+          mac: !secret kodi_mac
+    turn_off_action:
+      - service: media_player.kodi_call_method
+        data:
+          entity_id: media_player.kodi
+          method: System.Shutdown          
+         
+  - platform: yamaha
+    name: RX-A2000
+    host: 192.168.100.18
+
+device_tracker:
+  - platform: netgear
+    name: StarbaseD
+    host: 192.168.100.250
+    username: !secret router_user
+    password: !secret router_pwd
+    track_new_devices: no
+    
+envisalink:
+  host: 192.168.100.32
+  panel_type: DSC
+  user_name: user
+  password: !secret alarm_password
+  code: !secret alarm_code
+  port: 4025
+  evl_version: 4
+  keepalive_interval: 60
+  zonedump_interval: 30
+  panic_type: Police
+  zones:
+    1:
+      name: 'Fire Basement'
+      type: 'smoke'
+    2:
+      name: 'Entry Door'
+      type: 'opening'
+    3:
+      name: 'Garage Door'
+      type: 'opening'
+    4:
+      name: 'Laundry Door'
+      type: 'opening'
+    5:
+      name: 'Entry Motion'
+      type: 'motion'
+    6:
+      name: 'Kitchen Motion'
+      type: 'motion'
+    7:
+      name: 'Upstairs Motion'
+      type: 'motion'
+    8:
+      name: 'Living Room Window'
+      type: 'opening'
+    9:
+      name: 'Dining Room Window'
+      type: 'opening'
+    10:
+      name: 'Kitchen Window'
+      type: 'opening'
+    11:
+      name: 'Kitchen Door'
+      type: 'opening'
+    12:
+      name: 'Family Room Window'
+      type: 'opening'
+    13:
+      name: 'Powder Room Window'
+      type: 'opening'
+    14:
+      name: 'Basement Window North'
+      type: 'opening'
+    15:
+      name: 'Basement Window South'
+      type: 'opening'
+  partitions:
+    1:
+      name: 'Home Alarm'
+
+ecobee:
+   api_key: !secret ecobee_api
+   
+remote:
+  - platform: itach
+    name: Projector
+    host: 192.168.100.19
+    devices:
+      - name: Epson
+        connaddr: 1
+        commands:
+          - name: "POWER_ON"
+            data: "0000 006D 0000 0022 0157 00ab 0015 0040 0015 0040 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0040 0015 0040 0015 0015 0015 0040 0015 0015 0015 0040 0015 0015 0015 0040 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0040 0015 0015 0015 0015 0015 0040 0015 0040 0015 0040 0015 0040 0015 0040 0015 0015 0015 0040 0015 0040 0015 0015 0015 060a"
+          - name: "POWER_OFF"
+            data: "0000 006D 0000 0022 0157 00ab 0015 0040 0015 0040 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0015 0040 0015 0040 0015 0015 0015 0040 0015 0015 0015 0040 0015 0015 0015 0040 0015 0015 0015 0040 0015 0015 0015 0015 0015 0015 0015 0040 0015 0015 0015 0015 0015 0040 0015 0015 0015 0040 0015 0040 0015 0040 0015 0015 0015 0040 0015 0040 0015 0015 0015 060a"
+
+input_select:
+    volume_rxa2000:
+        name: Set volume to
+        options:
+         - -30.0
+         - -29.5
+         - -29.0
+         - -28.5
+         - -28.0
+         - -27.5
+         - -27.0
+         - -26.5
+         - -26.0
+         - -25.5
+         - -25.0
+         - -24.5
+         - -24.0
+         - -23.5
+         - -23.0
+         - -22.5
+         - -22.0
+         - -21.5
+         - -21.0
+         - -20.5
+         - -20.0
+         - -19.5
+         - -19.0
+        icon: mdi:volume-high
+        
+sensor:
+   - platform: yr
+     name: Weather
+     monitored_conditions:
+       - symbol
+       - temperature
+       - humidity
+       - precipitation
+  
+   - platform: moon
+     monitored_conditions:
+       - New moon
+      
+   - platform: template
+     sensors:
+        rxa2000_volume:
+           value_template: >
+              {% if is_state('media_player.rxa2000', 'on')  %}
+                 {% set n = states.media_player.rxa2000.attributes.volume_level|float %}
+                 {{ '%.1f'%( (-1.0+n)*100.0|round(0.0) ) }}
+              {% else %}
+                 Off
+              {% endif %}
+           friendly_name: RX-A2000 Volume Level
+           unit_of_measurement: "dB"
+
+   - platform: command_line
+     name: SSL cert expiry
+     unit_of_measurement: days
+     scan_interval: '24:00'
+     command: !secret cert_expiry_command
+
+scene:
+  - name: Start Theatre
+    entities:
+        switch.theatre_rope_light:
+            state: on
+        light.theatre_pot_light_left:
+            state: on
+            transition: 15
+            brightness_pct: 0
+        light.theatre_pot_light_right:
+            state: on
+            transition: 15
+            brightness_pct: 35
+  - name: Play Theatre
+    entities:
+        switch.theatre_rope_light:
+            state: off
+        light.theatre_pot_light_left:
+            state: on
+            transition: 15
+            brightness_pct: 0
+        light.theatre_pot_light_right:
+            state: on
+            transition: 15
+            brightness_pct: 0
+  - name: Pause Theatre
+    entities:
+        switch.theatre_rope_light:
+            state: on
+        light.theatre_pot_light_left:
+            state: on
+            transition: 15
+            brightness_pct: 0
+        light.theatre_pot_light_right:
+            state: on
+            transition: 15
+            brightness_pct: 35
+            
+shell_command: 
+  renew_ssl: certbot renew --quiet --no-self-upgrade --standalone --preferred-challenges http-01
+  
+# Text to speech
+tts:
+  - platform: google
+
+alexa:
+  
+intent_script: !include intent_script.yaml
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
